@@ -1,0 +1,117 @@
+[
+  {
+    "features": {
+      "age": 30,
+      "job": "student",
+      "marital": "single",
+      "education": "professional.course",
+      "default": "no",
+      "contact": "cellular",
+      "month": "sep",
+      "day_of_week": "tue",
+      "campaign": 2,
+      "pdays": 6,
+      "previous": 1,
+      "poutcome": "success",
+      "emp.var.rate": -1.1,
+      "cons.price.idx": 94.199,
+      "cons.conf.idx": -37.5,
+      "euribor3m": 0.88,
+      "nr.employed": 4963.6
+    },
+    "expected_probability": 0.9316,
+    "expected_prediction": 1
+  },
+  {
+    "features": {
+      "age": 35,
+      "job": "unemployed",
+      "marital": "married",
+      "education": "professional.course",
+      "default": "no",
+      "contact": "cellular",
+      "month": "dec",
+      "day_of_week": "thu",
+      "campaign": 3,
+      "pdays": 999,
+      "previous": 1,
+      "poutcome": "failure",
+      "emp.var.rate": -3.0,
+      "cons.price.idx": 92.713,
+      "cons.conf.idx": -33.0,
+      "euribor3m": 0.707,
+      "nr.employed": 5023.5
+    },
+    "expected_probability": 0.8317,
+    "expected_prediction": 1
+  },
+  {
+    "features": {
+      "age": 35,
+      "job": "services",
+      "marital": "married",
+      "education": "high.school",
+      "default": "unknown",
+      "contact": "telephone",
+      "month": "jun",
+      "day_of_week": "wed",
+      "campaign": 14,
+      "pdays": 999,
+      "previous": 0,
+      "poutcome": "nonexistent",
+      "emp.var.rate": 1.4,
+      "cons.price.idx": 94.465,
+      "cons.conf.idx": -41.8,
+      "euribor3m": 4.864,
+      "nr.employed": 5228.1
+    },
+    "expected_probability": 0.2213,
+    "expected_prediction": 0
+  },
+  {
+    "features": {
+      "age": 37,
+      "job": "self-employed",
+      "marital": "single",
+      "education": "basic.4y",
+      "default": "no",
+      "contact": "cellular",
+      "month": "may",
+      "day_of_week": "mon",
+      "campaign": 3,
+      "pdays": 999,
+      "previous": 1,
+      "poutcome": "failure",
+      "emp.var.rate": -1.8,
+      "cons.price.idx": 92.893,
+      "cons.conf.idx": -46.2,
+      "euribor3m": 1.244,
+      "nr.employed": 5099.1
+    },
+    "expected_probability": 0.4852,
+    "expected_prediction": 0
+  },
+  {
+    "features": {
+      "age": 31,
+      "job": "blue-collar",
+      "marital": "single",
+      "education": "professional.course",
+      "default": "no",
+      "contact": "cellular",
+      "month": "may",
+      "day_of_week": "tue",
+      "campaign": 2,
+      "pdays": 999,
+      "previous": 0,
+      "poutcome": "nonexistent",
+      "emp.var.rate": -1.8,
+      "cons.price.idx": 92.893,
+      "cons.conf.idx": -46.2,
+      "euribor3m": 1.266,
+      "nr.employed": 5099.1
+    },
+    "expected_probability": 0.608,
+    "expected_prediction": 0
+  }
+]

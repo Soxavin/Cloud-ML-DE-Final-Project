@@ -48,4 +48,6 @@ Build and push the image (from the repo root; `--platform linux/amd64` because E
 docker buildx build --platform linux/amd64 -f model_service/Dockerfile -t <dockerhub-user>/bank-model-service:v0 --push .
 ```
 
-`v0` carries the placeholder model from `scripts/train_placeholder.py`; `v1` will carry the final stacking model from the notebook.
+`v0` carried the placeholder model from `scripts/train_placeholder.py`. `model/` now holds **v1**, the final stacking model saved by notebook section 7.4 (threshold 0.74, test F1 0.531). Build the image as `bank-model-service:v1`.
+
+`tests/model_service/test_parity.py` checks that the saved model gives the same probabilities as the notebook for 5 test clients (`tests/fixtures/parity_rows.json`). The 2 "yes" and 3 "no" clients in that file also make good Postman demo cases.
