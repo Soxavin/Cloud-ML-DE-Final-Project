@@ -1,0 +1,7 @@
+# Local dev + test tools. The ML libraries get pinned to Colab's exact
+# versions in Task 4 (model_service/requirements.txt), then this file
+# will just point at that one.
+pandas
+numpy
+scikit-learn
+pytest
