@@ -1,0 +1,99 @@
+{
+  "model_version": "v0-placeholder",
+  "features": [
+    "age",
+    "job",
+    "marital",
+    "education",
+    "default",
+    "contact",
+    "month",
+    "day_of_week",
+    "campaign",
+    "pdays",
+    "previous",
+    "poutcome",
+    "emp.var.rate",
+    "cons.price.idx",
+    "cons.conf.idx",
+    "euribor3m",
+    "nr.employed"
+  ],
+  "categories": {
+    "job": [
+      "admin.",
+      "blue-collar",
+      "entrepreneur",
+      "housemaid",
+      "management",
+      "retired",
+      "self-employed",
+      "services",
+      "student",
+      "technician",
+      "unemployed",
+      "unknown"
+    ],
+    "marital": [
+      "divorced",
+      "married",
+      "single",
+      "unknown"
+    ],
+    "education": [
+      "basic.4y",
+      "basic.6y",
+      "basic.9y",
+      "high.school",
+      "illiterate",
+      "professional.course",
+      "university.degree",
+      "unknown"
+    ],
+    "default": [
+      "no",
+      "unknown",
+      "yes"
+    ],
+    "contact": [
+      "cellular",
+      "telephone"
+    ],
+    "month": [
+      "apr",
+      "aug",
+      "dec",
+      "jul",
+      "jun",
+      "mar",
+      "may",
+      "nov",
+      "oct",
+      "sep"
+    ],
+    "day_of_week": [
+      "fri",
+      "mon",
+      "thu",
+      "tue",
+      "wed"
+    ],
+    "poutcome": [
+      "failure",
+      "nonexistent",
+      "success"
+    ]
+  },
+  "threshold": 0.5,
+  "base_models": [],
+  "meta_model": "LogisticRegression (placeholder, not the final model)",
+  "test_metrics": null,
+  "versions": {
+    "python": "3.13.18",
+    "scikit-learn": "1.6.1",
+    "scipy": "1.16.3",
+    "numpy": "2.4.6",
+    "pandas": "2.2.3",
+    "joblib": "1.6.0"
+  }
+}

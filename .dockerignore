@@ -1,0 +1,12 @@
+# keep the build context small and free of local junk
+.git
+.venv
+.venv-*
+**/__pycache__
+.pytest_cache
+.superpowers
+data
+notebooks
+tests
+scripts
+*.md

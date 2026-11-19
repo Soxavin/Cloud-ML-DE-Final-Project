@@ -16,6 +16,7 @@ backend API and an internal model service.
 | `model/` | `model.joblib` + `metadata.json` exported from the notebook | ML |
 | `model_service/` | Internal FastAPI app that loads the model (port 8001) | ML |
 | `backend/` | Public FastAPI app the client calls (port 8000) | Cloud |
+| `scripts/` | `train_placeholder.py`: quick stand-in model so the backend can be built early | ML |
 | `tests/` | pytest suite | both |
 
 ## Running the tests
@@ -25,3 +26,26 @@ python -m venv .venv && source .venv/bin/activate
 pip install -r requirements-dev.txt
 pytest
 ```
+
+## Model service (internal, port 8001)
+
+Loads `model/model.joblib` + `model/metadata.json` once at startup.
+
+| Method | Path | Returns |
+| --- | --- | --- |
+| GET | `/health` | `{"status": "ok", "model_loaded": true}`, or 503 if the model failed to load |
+| POST | `/predict` | `{"features": {...17 columns...}}` -> `{"probability", "prediction", "threshold", "model_version"}`; 422 if a column is missing or unusable |
+
+Run it locally (from the repo root, with the virtual environment active):
+
+```bash
+MODEL_DIR=model uvicorn model_service.main:app --port 8001
+```
+
+Build and push the image (from the repo root; `--platform linux/amd64` because EC2 is not ARM like Apple Silicon):
+
+```bash
+docker buildx build --platform linux/amd64 -f model_service/Dockerfile -t <dockerhub-user>/bank-model-service:v0 --push .
+```
+
+`v0` carries the placeholder model from `scripts/train_placeholder.py`; `v1` will carry the final stacking model from the notebook.

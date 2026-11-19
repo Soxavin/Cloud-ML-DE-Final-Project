@@ -1,14 +1,9 @@
-# Pinned to the versions Google Colab uses (checked 19 Nov 2026), so local runs,
-# tests and the saved model all behave the same. Task 4 moves these pins into
-# model_service/requirements.txt and this file will point at it.
-scikit-learn==1.6.1
-numpy==2.4.6
-pandas==2.2.3
-joblib==1.6.0
-scipy==1.16.3
-pytest
+# Everything the model service needs (pinned to Colab's versions) ...
+-r model_service/requirements.txt
 
-# for running the notebook locally in VS Code (Colab already has these)
+# ... plus tools for testing and for running the notebook locally in VS Code
+pytest
+httpx2
 matplotlib
 seaborn
 ipykernel

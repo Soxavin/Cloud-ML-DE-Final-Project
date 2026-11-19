@@ -1,0 +1,12 @@
+# Runtime libraries for the model service.
+# The ML pins must match Google Colab exactly (checked 19 Nov 2026): the model is
+# trained there, and a different scikit-learn version may fail to load it.
+scikit-learn==1.6.1
+scipy==1.16.3
+numpy==2.4.6
+pandas==2.2.3
+joblib==1.6.0
+
+fastapi==0.165.0
+uvicorn==0.54.0
+pydantic==2.14.3
