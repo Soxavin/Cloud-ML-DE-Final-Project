@@ -17,3 +17,6 @@ venv/
 
 # Local agent scratch
 .superpowers/
+
+# Dataset (downloaded by the notebook, not committed)
+data/

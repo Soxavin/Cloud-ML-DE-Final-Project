@@ -5,3 +5,8 @@ pandas
 numpy
 scikit-learn
 pytest
+
+# for running the notebook locally in VS Code (Colab already has these)
+matplotlib
+seaborn
+ipykernel
