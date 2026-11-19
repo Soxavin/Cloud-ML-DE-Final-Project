@@ -5,6 +5,7 @@ scikit-learn==1.6.1
 numpy==2.4.6
 pandas==2.2.3
 joblib==1.6.0
+scipy==1.16.3
 pytest
 
 # for running the notebook locally in VS Code (Colab already has these)
