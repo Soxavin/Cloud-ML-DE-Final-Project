@@ -1,9 +1,10 @@
-# Local dev + test tools. The ML libraries get pinned to Colab's exact
-# versions in Task 4 (model_service/requirements.txt), then this file
-# will just point at that one.
-pandas
-numpy
-scikit-learn
+# Pinned to the versions Google Colab uses (checked 19 Nov 2026), so local runs,
+# tests and the saved model all behave the same. Task 4 moves these pins into
+# model_service/requirements.txt and this file will point at it.
+scikit-learn==1.6.1
+numpy==2.4.6
+pandas==2.2.3
+joblib==1.6.0
 pytest
 
 # for running the notebook locally in VS Code (Colab already has these)
