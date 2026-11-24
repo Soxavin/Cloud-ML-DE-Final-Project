@@ -1,0 +1,468 @@
+{
+  "info": {
+    "name": "Bank Marketing Subscription Predictor",
+    "description": "CLD 375 final project. Set the base_url variable to http://<elastic-ip>:8000.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://13.219.134.164:8000"
+    }
+  ],
+  "item": [
+    {
+      "name": "1. Health",
+      "item": [
+        {
+          "name": "GET /health",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "pm.test('Both ok', function () { const b = pm.response.json(); pm.expect(b.backend).to.eql('ok'); pm.expect(b.model_service).to.eql('ok'); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "2. Predictions",
+      "item": [
+        {
+          "name": "Likely yes (expect 0.9273, yes)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"age\": 30,\n  \"job\": \"student\",\n  \"marital\": \"single\",\n  \"education\": \"professional.course\",\n  \"default\": \"no\",\n  \"contact\": \"cellular\",\n  \"month\": \"sep\",\n  \"day_of_week\": \"tue\",\n  \"campaign\": 2,\n  \"days_since_last_contact\": 6,\n  \"previous\": 1,\n  \"poutcome\": \"success\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Prediction is yes', function () { pm.expect(body.prediction).to.eql('yes'); });",
+                  "pm.test('Probability is 0.9273', function () { pm.expect(body.subscribe_probability).to.be.closeTo(0.9273, 0.00005); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Likely no (expect 0.3971, no)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"age\": 30,\n  \"job\": \"services\",\n  \"marital\": \"single\",\n  \"education\": \"university.degree\",\n  \"default\": \"no\",\n  \"contact\": \"telephone\",\n  \"month\": \"sep\",\n  \"day_of_week\": \"mon\",\n  \"campaign\": 1,\n  \"days_since_last_contact\": null,\n  \"previous\": 0,\n  \"poutcome\": \"nonexistent\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Prediction is no', function () { pm.expect(body.prediction).to.eql('no'); });",
+                  "pm.test('Probability is 0.3971', function () { pm.expect(body.subscribe_probability).to.be.closeTo(0.3971, 0.00005); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Borderline (expect 0.7282, no)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"age\": 37,\n  \"job\": \"self-employed\",\n  \"marital\": \"single\",\n  \"education\": \"basic.4y\",\n  \"default\": \"no\",\n  \"contact\": \"cellular\",\n  \"month\": \"may\",\n  \"day_of_week\": \"mon\",\n  \"campaign\": 3,\n  \"days_since_last_contact\": null,\n  \"previous\": 1,\n  \"poutcome\": \"failure\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 200', function () { pm.response.to.have.status(200); });",
+                  "const body = pm.response.json();",
+                  "pm.test('Prediction is no', function () { pm.expect(body.prediction).to.eql('no'); });",
+                  "pm.test('Probability is 0.7282', function () { pm.expect(body.subscribe_probability).to.be.closeTo(0.7282, 0.00005); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "3. Errors (expect 422)",
+      "item": [
+        {
+          "name": "Unknown job: doctor",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"age\": 30,\n  \"job\": \"doctor\",\n  \"marital\": \"single\",\n  \"education\": \"professional.course\",\n  \"default\": \"no\",\n  \"contact\": \"cellular\",\n  \"month\": \"sep\",\n  \"day_of_week\": \"tue\",\n  \"campaign\": 2,\n  \"days_since_last_contact\": 6,\n  \"previous\": 1,\n  \"poutcome\": \"success\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 422', function () { pm.response.to.have.status(422); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Missing age",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"job\": \"student\",\n  \"marital\": \"single\",\n  \"education\": \"professional.course\",\n  \"default\": \"no\",\n  \"contact\": \"cellular\",\n  \"month\": \"sep\",\n  \"day_of_week\": \"tue\",\n  \"campaign\": 2,\n  \"days_since_last_contact\": 6,\n  \"previous\": 1,\n  \"poutcome\": \"success\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 422', function () { pm.response.to.have.status(422); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Age is text: thirty",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"age\": \"thirty\",\n  \"job\": \"student\",\n  \"marital\": \"single\",\n  \"education\": \"professional.course\",\n  \"default\": \"no\",\n  \"contact\": \"cellular\",\n  \"month\": \"sep\",\n  \"day_of_week\": \"tue\",\n  \"campaign\": 2,\n  \"days_since_last_contact\": 6,\n  \"previous\": 1,\n  \"poutcome\": \"success\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 422', function () { pm.response.to.have.status(422); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Campaign is 0",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"age\": 30,\n  \"job\": \"student\",\n  \"marital\": \"single\",\n  \"education\": \"professional.course\",\n  \"default\": \"no\",\n  \"contact\": \"cellular\",\n  \"month\": \"sep\",\n  \"day_of_week\": \"tue\",\n  \"campaign\": 0,\n  \"days_since_last_contact\": 6,\n  \"previous\": 1,\n  \"poutcome\": \"success\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 422', function () { pm.response.to.have.status(422); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Misspelled field: agee",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"job\": \"student\",\n  \"marital\": \"single\",\n  \"education\": \"professional.course\",\n  \"default\": \"no\",\n  \"contact\": \"cellular\",\n  \"month\": \"sep\",\n  \"day_of_week\": \"tue\",\n  \"campaign\": 2,\n  \"days_since_last_contact\": 6,\n  \"previous\": 1,\n  \"poutcome\": \"success\",\n  \"agee\": 30\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 422', function () { pm.response.to.have.status(422); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "4. Model down (run docker compose stop model-service on EC2 first, expect 503)",
+      "item": [
+        {
+          "name": "Likely yes while model is down",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": {
+              "raw": "{{base_url}}/predict",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "predict"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"project\": \"de-ml-final\",\n  \"age\": 30,\n  \"job\": \"student\",\n  \"marital\": \"single\",\n  \"education\": \"professional.course\",\n  \"default\": \"no\",\n  \"contact\": \"cellular\",\n  \"month\": \"sep\",\n  \"day_of_week\": \"tue\",\n  \"campaign\": 2,\n  \"days_since_last_contact\": 6,\n  \"previous\": 1,\n  \"poutcome\": \"success\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 503', function () { pm.response.to.have.status(503); });"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "GET /health while model is down",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/health",
+              "host": [
+                "{{base_url}}"
+              ],
+              "path": [
+                "health"
+              ]
+            }
+          },
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "pm.test('Status is 503', function () { pm.response.to.have.status(503); });"
+                ]
+              }
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
