@@ -1,0 +1,17 @@
+services:
+  model-service:
+    image: ponitaponlork/bank-model-service:v1
+    expose:
+      - "8001"            # internal only, no ports: entry
+    restart: unless-stopped
+
+  backend:
+    image: ponitaponlork/bank-backend:v1
+    ports:
+      - "8000:8000"
+    environment:
+      - MODEL_SERVICE_URL=http://model-service:8001
+    depends_on:
+      model-service:
+        condition: service_healthy   # uses the HEALTHCHECK in the image
+    restart: unless-stopped
