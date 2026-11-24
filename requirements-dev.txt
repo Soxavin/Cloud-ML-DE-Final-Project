@@ -7,3 +7,4 @@ httpx2
 matplotlib
 seaborn
 ipykernel
+-r backend/requirements.txt
