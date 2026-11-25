@@ -44,6 +44,7 @@ Postman <--prediction, probability, threshold, model version, input received--
 | `backend/` | Public FastAPI app the client calls (port 8000) | Cloud |
 | `docker-compose.yml` | Runs both containers together | Cloud |
 | `postman/` | Postman collection for testing and the demo | Cloud |
+| `scripts/deploy_ec2.sh` | One-command setup on a fresh EC2 instance (Docker, images, start, health check) | Cloud |
 | `scripts/train_placeholder.py` | Quick stand-in model used before `v1` existed (no longer needed) | ML |
 | `tests/` | pytest suite for `bankml`, the model service and the backend | both |
 
@@ -139,20 +140,21 @@ the model-service image with a new tag and update the compose file.
 
 ## Deploying on EC2
 
-Instance: Ubuntu 24.04 LTS, `t3.micro`, key pair `vockey`, an Elastic IP (so the address survives lab
-restarts). Security group: SSH (22) from your own IP, TCP 8000 from anywhere. **Port 8001 stays closed.**
+We deploy in the AWS Academy **Data Engineering sandbox**, which deletes every instance when the lab session
+ends. So there is no Elastic IP and no restart to survive: we launch a fresh instance each time and the script
+below sets everything up in a few minutes.
+
+Instance: Ubuntu 24.04 LTS, `t3.micro`, key pair `vockey`. Security group: SSH (22) from your own IP, TCP 8000
+from anywhere. **Port 8001 stays closed.**
 
 ```bash
-ssh -i labsuser.pem ubuntu@<elastic-ip>
-curl -fsSL https://get.docker.com | sudo sh        # Docker + Compose plugin
-sudo usermod -aG docker ubuntu                      # then log out and back in
-git clone https://github.com/Soxavin/Cloud-ML-DE-Final-Project.git
-cd Cloud-ML-DE-Final-Project
-docker compose pull
-docker compose up -d
-docker compose ps                                   # both containers "healthy" after up to a minute
-curl localhost:8000/health
+ssh -i labsuser.pem ubuntu@<public-ip>
+curl -fsSL https://raw.githubusercontent.com/Soxavin/Cloud-ML-DE-Final-Project/main/scripts/deploy_ec2.sh | bash
 ```
+
+`scripts/deploy_ec2.sh` installs Docker, downloads `docker-compose.yml`, pulls both images from Docker Hub,
+starts them and waits until `/health` answers. At the end it prints the address to put in Postman's
+`base_url`. If something fails it prints the container status and logs instead.
 
 Useful commands on the server:
 
@@ -163,20 +165,21 @@ Useful commands on the server:
 | `docker compose stop model-service` / `start model-service` | Demonstrates the 503 error handling |
 | `docker compose pull && docker compose up -d` | Updates to newly pushed images |
 
-Both containers use `restart: unless-stopped`, so they start again by themselves after the lab stops and
-restarts the instance.
+The script runs Docker with `sudo`, so prefix the commands above with `sudo` too (for example
+`sudo docker compose ps`), and run them from `~/bank-app`.
 
 ## Demo checklist
 
-1. Start the lab 15 minutes early and check the instance is running.
-2. In a browser: `http://<elastic-ip>:8000/health` shows both services ok.
-3. Postman: import `postman/bank-marketing.postman_collection.json`, check `base_url`, then run:
+1. Start the lab 30 to 45 minutes early, launch the instance and run `scripts/deploy_ec2.sh`. Keep the lab session
+   open until the demo is over: ending it deletes the instance.
+2. In a browser: `http://<public-ip>:8000/health` shows both services ok.
+3. Postman: import `postman/bank-marketing.postman_collection.json`, set `base_url` to the address the script printed, then run:
     - **Health**
     - **Likely yes** (expect 0.9273, "yes"), **Likely no** (0.3971, "no"), **Borderline** (0.7282, "no", just under
       the 0.74 threshold)
     - **Errors** (all 422)
-    - **Model down**: run `docker compose stop model-service` on EC2 first (expect 503), then `start` it again
-4. On EC2: `docker compose ps` and `docker compose logs --tail 20`.
+    - **Model down**: run `sudo docker compose stop model-service` on EC2 (in `~/bank-app`) first (expect 503), then `start` it again
+4. On EC2, in `~/bank-app`: `sudo docker compose ps` and `sudo docker compose logs --tail 20`.
 
 ## Troubleshooting
 
@@ -186,4 +189,4 @@ restarts the instance.
 | `exec format error` on EC2 | Image built for ARM on a Mac; rebuild with `--platform linux/amd64` |
 | `Permission denied (publickey)` on SSH | Old `labsuser.pem`; download it again from the current lab session's Details panel |
 | `/health` returns 503 right after a restart | The model service is still loading the model; wait a few seconds |
-| Postman can't connect after a lab restart | The instance has no Elastic IP and its address changed; use the new address or attach an Elastic IP |
+| Postman can't connect | The lab session ended and deleted the instance, or `base_url` still has an old address. Redeploy with `scripts/deploy_ec2.sh` and update `base_url` |
